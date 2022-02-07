@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash,
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user
 from .models import User
+from pathlib import Path
 from . import db
 
 auth = Blueprint('auth', __name__)
@@ -51,6 +52,10 @@ def signup_post():
     # create a new user with the form data. Hash the password so the plaintext version isn't saved.
     new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
 
+    #Create upload folder for document and images for the user
+    Path(f"static/Cloud/{email}/documents").mkdir(parents=True, exist_ok=True)
+    Path(f"static/Cloud/{email}/images").mkdir(parents=True, exist_ok=True)
+
     # add the new user to the database
     db.session.add(new_user)
     db.session.commit()
@@ -58,11 +63,13 @@ def signup_post():
 
 
 @auth.route('/reset-password')
+@login_required
 def reset_password():
     return render_template('reset-password.html')
 
 
 @auth.route('/reset-password', methods=['POST'])
+@login_required
 def reset_password_post():
 
     # get all the data from the form 
