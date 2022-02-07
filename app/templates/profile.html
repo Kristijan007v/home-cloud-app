@@ -1,7 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="title">
-  Welcome, {{ name }}!
-</h1>
+<div class="bg-gray-800 rounded-md mt-16 w-5/6 md:w-3/6 p-6 mx-auto">
+    <h3 class="title text-center">
+        Your profile
+    </h3>
+    <div class="info mt-4 pb-6 flex flex-col gap-4">
+        <img class="w-3/5 md:2/5 lg:w-1/5 rounded-full border-4 border-blue-600 shadow-md mx-auto" src="https://randomuser.me/api/portraits/men/41.jpg" alt="user image" />
+<!--         <form class="text-center" action="">
+            <input type="file" name="" id="">
+        </form> -->
+        <div class="special-field">
+            Name: {{name}}
+        </div>
+        <div class="special-field">
+            Email: {{email}}
+        </div>
+        <a href="{{ url_for('auth.reset_password') }}" class="btn-field">Reset your password</a>
+        <a href="{{ url_for('auth.logout') }}" class="btn-field">Logout</a>
+    </div>
+</div>
 {% endblock %}

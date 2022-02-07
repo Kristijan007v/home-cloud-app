@@ -2,16 +2,149 @@
 
 {% block content %}
 <div class="">
-    <h1 class="bg-blue-500 text-white uppercase tracking-wide px-6 py-2">Hello World</h1>
-    <p class="bg-gray-50 text-gray-600 text-sm font-semibold px-6 py-2">Flask App Scaffolding with Tailwind CSS (JIT
-        Compiler) +
-        CSS Nano for minification</p>
-
 </div>
+
+<!-- New folder -->
+<div id="newFolder" class="bg-gray-400/70 fixed top-0 bottom-0 left-0 right-0 z-10 hidden">
+    <button onclick="closeForm()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>  
+    </button>      
+    <div class="dark:bg-gray-800 bg-white w-1/5 mt-4 m-auto p-6 rounded-md">
+        <form class="flex justify-center gap-4" action="http://127.0.0.1:5000/create-folder" method="get">
+            <input class="p-2 dark:bg-gray-700 bg-gray-200 rounded-md" type="text" name="filename" id="filename" placeholder="Folder name">
+            <input class="bg-blue-600 p-2 text-white rounded-md cursor-pointer" type="submit" value="Create">
+        </form>
+    </div>
+</div>
+
+<!-- Upload new file -->
+<div id="newFile" class="bg-gray-400/70 fixed top-0 bottom-0 left-0 right-0 z-10 hidden" onclick="closeNewFolder()">
+    <button onclick="closeNewFolder()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>  
+    </button>      
+    <div class="dark:bg-gray-800 bg-white w-1/5 mt-4 m-auto p-6 rounded-md">
+        <form class="flex justify-center gap-4" action="http://127.0.0.1:5000/file-upload" method="post" enctype="multipart/form-data">
+            <input class="p-2 dark:bg-gray-700 bg-gray-200 rounded-md" type="file" name="file" id="file">
+            <input class="bg-blue-600 p-2 text-white rounded-md cursor-pointer" type="submit" value="Upload">
+        </form>
+    </div>
+</div>
+
+
+    <!-- Fixed buttons -->
+
+    <!-- Upload file fixed button -->
+    <span
+      class="fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-500 text-white p-4 rounded-full cursor-pointer"
+    onclick="openNewFolder()"">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+        />
+      </svg>
+    </span>
+
+    <!-- New folder fixed button -->
+    <span
+      class="fixed bottom-16 mb-6 right-6 bg-blue-600 hover:bg-blue-500 text-white p-4 rounded-full cursor-pointer"
+    onclick="showForm()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 4v16m8-8H4"
+        />
+      </svg>
+    </span>
+
+    <span class="choose-language fixed bottom-6 left-6">
+      <!-- <label for="cars">Language</label> -->
+      <select class="bg-blue-600 p-2 rounded-md text-white" id="cars" name="cars">
+        <option value="volvo">English</option>
+        <option value="saab">Hrvatski</option>
+      </select>
+    </span>
 
 {% endblock content %}
 
 {% block scripts %}
+ <!-- Open and close elements scripts -->
+ <script>
+
+    /* Open and close newFolder form */
+    var newFolder = document.getElementById("newFolder");
+
+    function showForm(){
+        newFolder.style.display = "block";
+    }
+
+    function closeForm(){
+        newFolder.style.display = "none";
+    }
+
+    /* Open and close upload new folder form */
+    var newFile = document.getElementById("newFile");
+
+    function openNewFolder(){
+        newFile.style.display = "block";
+    }
+    
+    function closeNewFolder(){
+        newFile.style.display = "none";
+    }
+
+    /* Open and close settings window */
+
+    var settings = document.getElementById("settings");
+
+    function openSettings(){
+        settings.style.display = "block";
+    }
+
+    function closeSettings(){
+        settings.style.display = "none";
+    }
+
+    // define a handler
+function doc_keyUp(e) {
+
+// this would test for whichever key is 40 (down arrow) and the ctrl key at the same time
+if (e.ctrlKey && e.key === 'ArrowDown') {
+// call your function to do the thing
+closeSettings();
+closeNewFolder();
+closeForm();
+}
+if (e.ctrlKey && e.key === 'ArrowUp') {
+// call your function to do the thing
+openForm();
+}
+}
+// register the handler 
+document.addEventListener('keyup', doc_keyUp, false);
+
+
+</script>
 {{ super() }}
 
 

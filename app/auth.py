@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from email import message
+from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user
 from .models import User
@@ -27,6 +28,7 @@ def login_post():
 
     # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
+    session['email'] = email
     return redirect(url_for('main.profile'))
 
 @auth.route('/signup')
@@ -43,7 +45,7 @@ def signup_post():
     user = User.query.filter_by(email=email).first() # if this returns a user, then the email already exists in database
 
     if user: # if a user is found, we want to redirect back to signup page so user can try again
-        flash('Email address already exists')
+        flash('Email address already exists. Please login.')
         return redirect(url_for('auth.signup'))
 
     # create a new user with the form data. Hash the password so the plaintext version isn't saved.
@@ -54,8 +56,38 @@ def signup_post():
     db.session.commit()
     return redirect(url_for('auth.login'))
 
+
+@auth.route('/reset-password')
+def reset_password():
+    return render_template('reset-password.html')
+
+
+@auth.route('/reset-password', methods=['POST'])
+def reset_password_post():
+
+    # get all the data from the form 
+    email = session['email']
+    password = request.form.get('new-password')
+    password_repeat = request.form.get('new-password-repeat')
+
+    if password == password_repeat:
+
+        #Get current signed in user
+        user =  User.query.filter_by(email=email).first()
+        # generate a new password
+        new_pasw = generate_password_hash(password, method='sha256')
+
+        # commit new password to the db
+        user.password = new_pasw
+        db.session.commit()
+    else:
+        flash('Entered passwords are not the same')
+
+    return redirect(url_for('auth.login'))
+
+
 @auth.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('main.index'))
+    return redirect(url_for('auth.login'))
