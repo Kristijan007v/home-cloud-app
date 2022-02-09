@@ -18,7 +18,7 @@ def sendmail():
 def profile():
     return render_template('profile.html', name=current_user.name, email=current_user.email)
 
-@main.route('/')
+@main.route('/my-cloud')
 @login_required
 def index():
 
@@ -29,11 +29,18 @@ def index():
     dir = os.walk(basepath)
     file_list = []
     filename_list = []
+    subdir_list = []
     for path, subdirs, files in dir:
         for file in files:
             temp = os.path.join(path + '/', file)
             filename_list.append(file)
+            subdir_list.append(subdirs)
             file_list.append(temp)
+
+
+    #Load and render all the folders from the server for the current user
+
+
 
 
     #Load and render all the images from the server for the current user

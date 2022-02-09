@@ -34,6 +34,9 @@ def create_app():
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
+    from .cloud import cloud as cloud_blueprint
+    app.register_blueprint(cloud_blueprint)
+
     # Import configuration profile based on FLASK_ENV variable - defaults to Production
     if os.environ.get('FLASK_ENV') == 'development':
         app.config.from_object('config.DevelopmentConfig')

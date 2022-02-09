@@ -5,6 +5,7 @@ from flask_login import login_user, login_required, logout_user
 from .models import User
 from pathlib import Path
 from . import db
+import os, shutil
 
 auth = Blueprint('auth', __name__)
 
@@ -55,6 +56,8 @@ def signup_post():
     #Create upload folder for document and images for the user
     Path(f"static/Cloud/{email}/documents").mkdir(parents=True, exist_ok=True)
     Path(f"static/Cloud/{email}/images").mkdir(parents=True, exist_ok=True)
+    Path(f"static/Cloud/{email}/Folders").mkdir(parents=True, exist_ok=True)
+    Path(f"static/Cloud/{email}/Computers").mkdir(parents=True, exist_ok=True)
 
     # add the new user to the database
     db.session.add(new_user)
@@ -72,8 +75,8 @@ def reset_password():
 @login_required
 def reset_password_post():
 
-    # get all the data from the form 
     email = session['email']
+    # get all the data from the form 
     password = request.form.get('new-password')
     password_repeat = request.form.get('new-password-repeat')
 
@@ -98,3 +101,37 @@ def reset_password_post():
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
+
+@auth.route('/delete-account', methods=['POST'])
+@login_required
+def delete_account():
+
+    email = session['email']
+    email_form = request.form.get('delete-confirmation')
+
+    if email == email_form:
+
+        delete_folder = f"static/Cloud/{email}"
+
+        #Delete user data from  db
+        User.query.filter_by(email=email).delete()
+        db.session.commit()
+
+        #Delete user folder from server
+        file_path = os.path.join(delete_folder)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            flash('Failed to delete your account')
+        
+
+        flash('Your account was succesfully deleted.')
+        return redirect(url_for('auth.login'))
+
+    
+    flash('Wrong confirmation message typed in.')
+    return redirect(url_for('main.profile') )
+        
