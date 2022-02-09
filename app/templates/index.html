@@ -15,69 +15,81 @@
   <!-- Load images from server -->
   <div class="pictures-section mt-0 p-4 w-5/6 md:w-4/5 mx-auto">
     <p class="title">Images</p>
+    {% if images_number > 0 %}
     <div class="border-t-2 border-gray-600 grid grid-cols-2 md:grid-cols-6 gap-4 p-8">
-      {% for hist, image_name in hists %}
-      <div class="image rounded-md shadow-xl hover:border-gray-400 hover:-translate-y-4 hover:duration-700 cursor-pointer">
-          <img class="rounded-t-md" src="{{hist}}" alt="{{hist}}" srcset="" />
-          <div class="info dark:bg-gray-800 p-4 rounded-b-md flex justify-between">
-              <p class="dark:text-white">{{image_name}}</p>
-              <a class="dark:text-white" href="{{hist}}" download="{{hist}}">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    {% for hist, image_name in hists %}
+    <div class="image rounded-md shadow-xl hover:border-gray-400 hover:-translate-y-4 hover:duration-700 cursor-pointer">
+        <img class="rounded-t-md" src="{{hist}}" alt="{{hist}}" srcset="" />
+        <div class="info dark:bg-gray-800 p-4 rounded-b-md flex justify-between">
+            <p class="dark:text-white">{{image_name}}</p>
+            <a class="dark:text-white" href="{{hist}}" download="{{hist}}">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-              </a>
-          </div>
-        </div>
-          {% endfor %}
+              </svg>
+          </a>
+      </div>
   </div>
-  </div>
+  {% endfor %}
+  {% else %}
+  <div class="border-t-2 border-gray-600 p-8">
+      <div class="empyty-field">
+          <p class="text-white">This section is empty. Feel free to drop a file <span class="underline hover:cursor-pointer text-blue-600" onclick="openNewFolder()">here.</span></p>
+      </div>
+      {% endif %}
+</div>
+</div>
 
    <!-- Load files from server -->
    <div class="mt-0 p-4 w-5/6 md:w-4/5 mx-auto">
     <p class="title">Documents</p>
     <div class="border-t-2 border-gray-600 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 p-8">
+        {% if files_number > 0 %}
         {% for file, filename in files%}
         <div class="dark:bg-gray-800 bg-white p-4 rounded-md border-2 dark:border-gray-700 hover:border-gray-400 hover:duration-700 cursor-pointer flex gap-4 overflow-hidden">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
             </svg>
-          <a class="dark:text-white" href="{{file}}" download="{{file}}">{{filename}}</a>
+        {% if filename|length > 30 %}
+          <a class="dark:text-white" href="{{file}}" download="{{file}}">{{filename[:30]}}...</a>
+          {% else %}
+          <a class="dark:text-white" href="{{file}}" download="{{file}}">{{filename[:30]}}</a>
+          {% endif %}
         </div>
         {% endfor %}
+        {% else %}
+        <div class="empyty-field">
+            <p class="text-white">This section is empty. Feel free to drop a file <span class="underline hover:cursor-pointer text-blue-600" onclick="openNewFolder()">here.</span></p>
+        </div>
+        {% endif %}
     </div>
   </div>
 
-
-   <!-- Load folders from server -->
-   <div class="mt-0 p-4 w-5/6 md:w-4/5 mx-auto">
-    <p class="title">Folders</p>
-    <div class="border-t-2 border-gray-600 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 p-8">
-        {% for file, filename in files%}
-        <div class="dark:bg-gray-800 bg-white p-4 rounded-md border-2 dark:border-gray-700 hover:border-gray-400 hover:duration-700 cursor-pointer flex gap-4 overflow-hidden">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
-            </svg>
-          <a class="dark:text-white" href="{{file}}" download="{{file}}">{{filename}}</a>
-        </div>
-        {% endfor %}
+     <!-- Load folders from server -->
+     <div class="mt-0 p-4 mb-20 w-5/6 md:w-4/5 mx-auto">
+      <p class="title">Folders</p>
+      <div class="border-t-2 border-gray-600 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 p-8">
+          {% if files_number > 0 %}
+          {% for folder in subfolders%}
+          <div class="dark:bg-gray-800 bg-white p-4 rounded-md border-2 dark:border-gray-700 hover:border-gray-400 hover:duration-700 cursor-pointer flex gap-4 overflow-hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd" />
+              </svg>
+          {% if folder|length > 30 %}
+            <a class="dark:text-white" href="/{{folder}}">{{folder[:30]}}...</a>
+            {% else %}
+            <a class="dark:text-white" href="/{{folder}}">{{folder[:30]}}</a>
+            {% endif %}
+          </div>
+          {% endfor %}
+          {% else %}
+          <div class="empyty-field">
+              <p class="text-white">This section is empty. Feel free to drop a file <span class="underline hover:cursor-pointer text-blue-600" onclick="openNewFolder()">here.</span></p>
+          </div>
+          {% endif %}
+      </div>
     </div>
-  </div>
 
-    {% for folder in folders %}
-    <p>{{folder}}</p>
-    {% endfor %}
-  <!-- Drag and drop files area -->
-<!--   <div id="drop_zone" class="drop-zone">
-    <span class="drop-zone__prompt">
-      <p>Drag one or more files to this Drop Zone ...</p>
-    </span>
-    <form action="/file-upload" method="post">
-      <input type="file" name="myFile" class="drop-zone__input">
-      <input type="submit" value="Upload">
-    </form>
-  </div> -->
     
-
 <!-- New folder -->
 <div id="newFolder" class="bg-gray-400/70 fixed top-0 bottom-0 left-0 right-0 z-10 hidden">
     <button onclick="closeForm()">
@@ -86,8 +98,8 @@
           </svg>  
     </button>      
     <div class="dark:bg-gray-800 bg-white w-1/5 mt-4 m-auto p-6 rounded-md">
-        <form class="flex justify-center gap-4" action="/create-folder/my-cloud" method="post">
-            <input class="p-2 dark:bg-gray-700 bg-gray-200 rounded-md" type="text" name="folder_name" id="folder_name" placeholder="Folder name">
+        <form class="flex justify-center gap-4" action="/create-folder" method="post">
+            <input class="p-2 dark:bg-gray-700 text-white bg-gray-200 rounded-md" type="text" name="folder_name" id="folder_name" placeholder="Folder name">
             <input class="bg-blue-600 p-2 text-white rounded-md cursor-pointer" type="submit" value="Create">
         </form>
     </div>

@@ -6,14 +6,15 @@ from .models import User
 from pathlib import Path
 from . import db
 import os
+import glob
 
 cloud = Blueprint('cloud', __name__)
 
 
 #Create a folder with a requested name on the server
-@cloud.route('/create-folder/<currentFolder>', methods = ['POST'])
+@cloud.route('/create-folder', methods=['POST'])
 @login_required
-def create_folder(currentFolder):
+def create_folder():
     # get all the data from the form 
     email = session['email']
     fname= request.form.get('folder_name')
@@ -60,7 +61,10 @@ def load_folder(folder):
 
 
     #Load and render all the folders from the server for the current user
-
+    dirname = f"static/Cloud/{email}/Folders/{folder}/Folders"
+    dir_folders = os.scandir(dirname)
+    subfolders = glob.glob(dirname).sort()
+    
 
     #Load and render all the images from the server for the current user
     basepath_images = f"static/Cloud/{email}/Folders/{folder}/images"
@@ -75,4 +79,4 @@ def load_folder(folder):
             images_list.append(temp_images)
             images_number += 1
 
-    return render_template('folder.html', files=zip(file_list, filename_list), hists = zip(images_list, image_names_list), folder_link = folder_link, folder = folder, images_number = images_number, files_number = files_number )
+    return render_template('folder.html', files=zip(file_list, filename_list), hists = zip(images_list, image_names_list), subfolders = subfolders, folder_link = folder_link, folder = folder, images_number = images_number, files_number = files_number )
