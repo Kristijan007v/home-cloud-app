@@ -68,12 +68,8 @@ def send_alerts():
 @main.route('/profile')
 @login_required
 def profile():
-    email = session['email']
 
-    dir = f"static/Cloud/{email}"
-    disk_used, disk_used_int = folder_size(dir)
-
-    return render_template('profile.html', name=current_user.name, email=current_user.email, disk_used = disk_used, disk_used_int = int(disk_used_int))
+    return render_template('profile.html', name=current_user.name, email=current_user.email)
 
 
 #Render a main index page

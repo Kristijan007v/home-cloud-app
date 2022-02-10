@@ -1,7 +1,0 @@
-clic
-Flask
-itsdangerous
-Jinja2
-MarkupSafe
-python-dotenv
-Werkzeug

@@ -1,12 +1,12 @@
-import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
+
+# init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
 
 def create_app():
-
     app = Flask(__name__)
 
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
@@ -37,13 +37,4 @@ def create_app():
     from .cloud import cloud as cloud_blueprint
     app.register_blueprint(cloud_blueprint)
 
-    # Import configuration profile based on FLASK_ENV variable - defaults to Production
-    if os.environ.get('FLASK_ENV') == 'development':
-        app.config.from_object('config.DevelopmentConfig')
-    elif os.environ.get('FLASK_ENV') == 'testing':
-        app.config.from_object('config.TestingConfig')
-    else:
-        app.config.from_object('config.ProductionConfig')
-
-    # Import routes here
     return app
