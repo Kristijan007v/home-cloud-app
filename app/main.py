@@ -44,6 +44,17 @@ def folder_size(Folderpath):
     return size_mb_str, size_mb_int
 
 
+def current_dir():
+    current_dir = os.getcwd()
+    return current_dir
+
+
+#Track current dir for all templates - FOR DEBUG ONLY
+""" @main.context_processor
+def inject():
+    return dict(current_dir=current_dir()) """
+
+
 @main.route('/alert-test')
 def send_alerts():
     email = session['email']
@@ -68,8 +79,12 @@ def send_alerts():
 @main.route('/profile')
 @login_required
 def profile():
+    email = session['email']
 
-    return render_template('profile.html', name=current_user.name, email=current_user.email)
+    dir = f"static/Cloud/{email}"
+    disk_used, disk_used_int = folder_size(dir)
+
+    return render_template('profile.html', name=current_user.name, email=current_user.email, disk_used = disk_used, disk_used_int = int(disk_used_int))
 
 
 #Render a main index page
@@ -78,7 +93,8 @@ def profile():
 def index():
 
     email = session['email']
-
+    """ os.chdir('/app') """
+    current_dir = os.getcwd()
     #Load and render all the files from the server for the current user
     basepath = f"static/Cloud/{email}/documents"
     dir = os.walk(basepath)
@@ -112,7 +128,7 @@ def index():
             images_list.append(temp_images)
             images_number += 1
 
-    return render_template('index.html', files=zip(file_list, filename_list), hists = zip(images_list, image_names_list), subfolders = subfolders, images_number = images_number, files_number = files_number)
+    return render_template('index.html', files=zip(file_list, filename_list), hists = zip(images_list, image_names_list), subfolders = subfolders, images_number = images_number, files_number = files_number, current_dir = current_dir)
 
 #Allowed file types for upload
 ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -126,8 +142,8 @@ def allowed_file(filename):
 @main.route('/file-upload', methods=['POST'])
 def upload_file():
     email = session['email']
-
-    dir = f"static/Cloud/vidovic@kristijan.me"
+    current = os.path.abspath(os.path.dirname(__file__))
+    dir = f"{current}/static/Cloud/vidovic@kristijan.me"
     disk_used, disk_used_int = folder_size(dir)
     image_ex = '.jpg'
     if request.method == 'POST':

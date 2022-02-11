@@ -12,7 +12,6 @@
 <!--         <form class="text-center" action="">
             <input type="file" name="" id="">
         </form> -->
-        {% if disk_used_int is defined %}
         <div class="special-field-blue mb-10">
             {% if disk_used_int < 160 %}
             <p>Used {{disk_used}} of 1.0 GB storage.</p>
@@ -20,7 +19,6 @@
             <p>Storage is full. ({{disk_used}})</p>
             {% endif %}
         </div>
-        {% endif %}
         <div class="special-field">
             Name: {{name}}
         </div>

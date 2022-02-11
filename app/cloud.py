@@ -61,9 +61,7 @@ def load_folder(folder):
 
 
     #Load and render all the folders from the server for the current user
-    dirname = f"static/Cloud/{email}/Folders/{folder}/Folders"
-    dir_folders = os.scandir(dirname)
-    subfolders = glob.glob(dirname).sort()
+
     
 
     #Load and render all the images from the server for the current user
@@ -79,4 +77,4 @@ def load_folder(folder):
             images_list.append(temp_images)
             images_number += 1
 
-    return render_template('folder.html', files=zip(file_list, filename_list), hists = zip(images_list, image_names_list), subfolders = subfolders, folder_link = folder_link, folder = folder, images_number = images_number, files_number = files_number )
+    return render_template('folder.html', files=zip(file_list, filename_list), hists = zip(images_list, image_names_list), folder_link = folder_link, folder = folder, images_number = images_number, files_number = files_number )
