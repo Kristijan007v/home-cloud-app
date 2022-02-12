@@ -20,7 +20,7 @@
   <body class="bg-gray-900">
     <!-- Message flashing -->
     {% with messages = get_flashed_messages() %} {% if messages %}
-    <div class="fixed bottom-0 w-full p-4 bg-red-500 text-white text-center">
+    <div class="fixed bottom-0 w-full p-4 bg-green-500 text-white text-center">
       {% for message in messages %}
       <span class="">{{ message }}</span>
       {% endfor %}
@@ -39,6 +39,16 @@
       </ul>
     </div>
     {% endif %} {% endwith %}
+
+    <!-- Container used to display DEV DEBUG INFO -->
+    {% if ip_address and location is defined %}
+    <div class="debug-info bg-red-500 p-4 flex justify-between text-white">
+      <p>Your IP: {{ip_address}}, Location: {{location}}</p>
+      <button>Don't display</button>
+    </div>
+    {% endif %}
+
+
 
     <!-- Navigation -->
     <nav class="flex justify-between p-4 bg-blue-600 text-white sticky top-0 z-9">

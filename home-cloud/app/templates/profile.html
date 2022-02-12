@@ -12,6 +12,7 @@
 <!--         <form class="text-center" action="">
             <input type="file" name="" id="">
         </form> -->
+        {% if disk_used_int is defined %}
         <div class="special-field-blue mb-10">
             {% if disk_used_int < 160 %}
             <p>Used {{disk_used}} of 1.0 GB storage.</p>
@@ -19,6 +20,7 @@
             <p>Storage is full. ({{disk_used}})</p>
             {% endif %}
         </div>
+        {% endif %}
         <div class="special-field">
             Name: {{name}}
         </div>
@@ -26,6 +28,7 @@
             Email: {{email}}
         </div>
         <a href="{{ url_for('auth.reset_password') }}" class="btn-field">Reset your password</a>
+        <a href="{{ url_for('cloud.generate_pdf') }}" class="btn-field">Generate login report</a>
         <!-- <a href="{{ url_for('auth.logout') }}" class="btn-field">Logout</a> -->
         <button class="btn-d-field" onclick="deletePopupOpen()">Delete account</button>
     </div>

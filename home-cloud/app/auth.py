@@ -1,18 +1,36 @@
-from email import message
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user
+from .logger import get_info
 from .models import User
 from pathlib import Path
-from . import db
 import os, shutil
+from . import db
+
 
 auth = Blueprint('auth', __name__)
 
+
+#Render a login page
 @auth.route('/login')
 def login():
     return render_template('login.html')
 
+
+#Render a signup page
+@auth.route('/signup')
+def signup():
+    return render_template('signup.html')
+
+
+#Render a reset-password page
+@auth.route('/reset-password')
+@login_required
+def reset_password():
+    return render_template('reset-password.html')
+
+
+#Route to procces login request
 @auth.route('/login', methods=['POST'])
 def login_post():
     # login code goes here
@@ -28,17 +46,19 @@ def login_post():
         flash('Please check your login details and try again.')
         return redirect(url_for('auth.login')) # if the user doesn't exist or password is wrong, reload the page
 
-    # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
     session['email'] = email
-    return redirect(url_for('main.profile'))
 
-@auth.route('/signup')
-def signup():
-    return render_template('signup.html')
+    #get all the user data and save it to log file
+    get_info()
 
+    return redirect(url_for('main.index'))
+
+
+#Route to procces signup request
 @auth.route('/signup', methods=['POST'])
 def signup_post():
+
     # code to validate and add user to database goes here
     email = request.form.get('email')
     name = request.form.get('name')
@@ -58,6 +78,7 @@ def signup_post():
     Path(f"static/Cloud/{email}/images").mkdir(parents=True, exist_ok=True)
     Path(f"static/Cloud/{email}/Folders").mkdir(parents=True, exist_ok=True)
     Path(f"static/Cloud/{email}/Computers").mkdir(parents=True, exist_ok=True)
+    Path(f"static/Cloud/{email}/Logs").mkdir(parents=True, exist_ok=True)
 
     # add the new user to the database
     db.session.add(new_user)
@@ -65,12 +86,7 @@ def signup_post():
     return redirect(url_for('auth.login'))
 
 
-@auth.route('/reset-password')
-@login_required
-def reset_password():
-    return render_template('reset-password.html')
-
-
+#Route to procces a password reset request
 @auth.route('/reset-password', methods=['POST'])
 @login_required
 def reset_password_post():
@@ -96,12 +112,7 @@ def reset_password_post():
     return redirect(url_for('auth.login'))
 
 
-@auth.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('auth.login'))
-
+#Route to procces a delete account request
 @auth.route('/delete-account', methods=['POST'])
 @login_required
 def delete_account():
@@ -134,4 +145,13 @@ def delete_account():
     
     flash('Wrong confirmation message typed in.')
     return redirect(url_for('main.profile') )
+
+
+#Process a logout request
+@auth.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('auth.login'))
+
         

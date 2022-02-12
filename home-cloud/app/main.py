@@ -1,23 +1,25 @@
-from email import message
-from http.cookiejar import MozillaCookieJar
-from flask import Blueprint, render_template, session, request, jsonify, flash, redirect, url_for
+from flask import Blueprint, render_template, session, request, flash, redirect, url_for
 from flask_login import login_required, current_user
-from . import db
-import os
 from werkzeug.utils import secure_filename
-import glob
-import math
-import pathlib
+from .logger import get_info
+from . import db
 import requests
+import pathlib
+import math
+import glob
+import os
+
 
 main = Blueprint('main', __name__)
 
-""" @main.route('/sendmail')
-@login_required
-def sendmail():
-    return render_template('send-email.html') """
 
-#Converting bytes
+#Allowed file types for upload
+ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'gif'])
+def allowed_file(filename):
+	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+#Converting bytes to other units
 def convert_size(size_bytes):
    if size_bytes == 0:
        return "0B"
@@ -26,7 +28,6 @@ def convert_size(size_bytes):
    p = math.pow(1024, i)
    s = round(size_bytes / p, 2)
    return "%s %s" % (s, size_name[i]), s
-
 
 
 #Calcutate folder or file size of the given folder, file name
@@ -49,10 +50,13 @@ def current_dir():
     return current_dir
 
 
-#Track current dir for all templates - FOR DEBUG ONLY
-""" @main.context_processor
-def inject():
-    return dict(current_dir=current_dir()) """
+#Track variables for usage in all templates - FOR DEBUG ONLY
+@main.context_processor
+def pass_info():
+
+    ip_address, location = get_info()
+
+    return dict(ip_address = ip_address, location = location)
 
 
 @main.route('/alert-test')
@@ -72,29 +76,27 @@ def send_alerts():
     return redirect(url_for('main.index'))
     
 
-
-
-
 #Render a profile page
 @main.route('/profile')
 @login_required
 def profile():
+
     email = session['email']
 
     dir = f"static/Cloud/{email}"
     disk_used, disk_used_int = folder_size(dir)
 
-    return render_template('profile.html', name=current_user.name, email=current_user.email, disk_used = disk_used, disk_used_int = int(disk_used_int))
+    return render_template('profile.html', name=current_user.name, email=current_user.email, 
+    disk_used = disk_used, disk_used_int = int(disk_used_int))
 
 
-#Render a main index page
+#Render a main index page - my-cloud
 @main.route('/my-cloud')
 @login_required
 def index():
 
     email = session['email']
-    """ os.chdir('/app') """
-    current_dir = os.getcwd()
+
     #Load and render all the files from the server for the current user
     basepath = f"static/Cloud/{email}/documents"
     dir = os.walk(basepath)
@@ -110,10 +112,10 @@ def index():
             file_list.append(temp)
             files_number += 1
 
+
     #Load and render all the folders from the server for the current user
     dirname = f"static/Cloud/{email}/Folders/*"
     subfolders= [os.path.basename(x) for x in glob.glob(dirname)]
-
 
     #Load and render all the images from the server for the current user
     basepath_images = f"static/Cloud/{email}/images"
@@ -128,14 +130,8 @@ def index():
             images_list.append(temp_images)
             images_number += 1
 
-    return render_template('index.html', files=zip(file_list, filename_list), hists = zip(images_list, image_names_list), subfolders = subfolders, images_number = images_number, files_number = files_number, current_dir = current_dir)
-
-#Allowed file types for upload
-ALLOWED_EXTENSIONS = set(['pdf', 'png', 'jpg', 'jpeg', 'gif'])
-def allowed_file(filename):
-	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
+    return render_template('index.html', files=zip(file_list, filename_list), hists = zip(images_list, image_names_list), subfolders = subfolders,
+     images_number = images_number, files_number = files_number)
 
 
 #File upload API route
