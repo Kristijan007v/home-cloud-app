@@ -73,12 +73,13 @@ def signup_post():
     # create a new user with the form data. Hash the password so the plaintext version isn't saved.
     new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
 
-    #Create upload folder for document and images for the user
+    #Create all necesseary folders for the new user
     Path(f"static/Cloud/{email}/documents").mkdir(parents=True, exist_ok=True)
     Path(f"static/Cloud/{email}/images").mkdir(parents=True, exist_ok=True)
-    Path(f"static/Cloud/{email}/Folders").mkdir(parents=True, exist_ok=True)
+    Path(f"static/Cloud/{email}/Folders/Reports").mkdir(parents=True, exist_ok=True)
     Path(f"static/Cloud/{email}/Computers").mkdir(parents=True, exist_ok=True)
     Path(f"static/Cloud/{email}/Logs").mkdir(parents=True, exist_ok=True)
+    Path(f"static/Cloud/{email}/Settings/settings.ini").mkdir(parents=True, exist_ok=True)
 
     # add the new user to the database
     db.session.add(new_user)
@@ -109,6 +110,7 @@ def reset_password_post():
     else:
         flash('Entered passwords are not the same')
 
+    logout_user()
     return redirect(url_for('auth.login'))
 
 

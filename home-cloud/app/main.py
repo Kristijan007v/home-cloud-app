@@ -55,8 +55,9 @@ def current_dir():
 def pass_info():
 
     ip_address, location = get_info()
+    email = session['email']
 
-    return dict(ip_address = ip_address, location = location)
+    return dict(ip_address = ip_address, location = location, email=email)
 
 
 @main.route('/alert-test')
@@ -139,7 +140,7 @@ def index():
 def upload_file():
     email = session['email']
     current = os.path.abspath(os.path.dirname(__file__))
-    dir = f"{current}/static/Cloud/vidovic@kristijan.me"
+    dir = f"{current}/static/Cloud/{email}"
     disk_used, disk_used_int = folder_size(dir)
     image_ex = '.jpg'
     if request.method == 'POST':
@@ -160,3 +161,22 @@ def upload_file():
             flash("Your storage is full.")
     return redirect(url_for('main.index'))
 
+@main.route('/upload-test/<email>', methods=['POST'])
+def upload_test(email):
+
+
+    file = request.files['file']
+    filename = file.filename
+    upload_path = f"static/Cloud/{email}/images"
+    file.save(os.path.join(upload_path, filename))
+
+    return ("Success!")
+
+@main.route('/delete-file/<filename>')
+def delete_file(filename):
+    email = session['email']
+    location = f"static/Cloud/{email}/documents"
+    path = os.path.join(location, filename)
+    os.remove(path)
+    flash(f'File "{filename}" was deleted succesfully.')
+    return redirect(url_for('main.index'))

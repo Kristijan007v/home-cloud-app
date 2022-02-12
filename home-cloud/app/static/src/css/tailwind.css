@@ -48,3 +48,4 @@
 .btn-d-field{
     @apply bg-red-500 w-full md:w-4/5 lg:w-2/5 p-3 rounded-md text-white mx-auto hover:bg-red-400 block text-center;
 }
+
