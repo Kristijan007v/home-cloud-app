@@ -138,6 +138,7 @@
     <div class="dark:bg-gray-800 bg-white w-1/5 mt-4 m-auto p-6 rounded-md">
         <form class="flex justify-center gap-4" action="http://127.0.0.1:8080/compress-image/{{email}}" method="post" enctype="multipart/form-data">
             <input class="p-2 dark:bg-gray-700 bg-gray-200 rounded-md" type="file" name="image" id="image">
+            <input type="hidden" name="image_quality" id="image_quality" value="{{image_quality}}">
             <input class="bg-blue-600 p-2 text-white rounded-md cursor-pointer" type="submit" value="Upload">
         </form>
     </div>

@@ -1,10 +1,12 @@
 from flask import Blueprint, render_template, session, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
-from .logger import get_info
+from .logger import get_info, save_json
 from . import db
 import requests
+from .config import load_settings, save_settings
 import pathlib
+import time
 import math
 import glob
 import os
@@ -56,8 +58,9 @@ def pass_info():
 
     ip_address, location = get_info()
     email = session['email']
+    image_quality, ip_info = load_settings()
 
-    return dict(ip_address = ip_address, location = location, email=email)
+    return dict(ip_address = ip_address, location = location, email=email, image_quality = image_quality, ip_info = ip_info)
 
 
 @main.route('/alert-test')
@@ -166,9 +169,19 @@ def upload_test(email):
 
 
     file = request.files['file']
+
     filename = file.filename
+
     upload_path = f"static/Cloud/{email}/images"
     file.save(os.path.join(upload_path, filename))
+
+    file_path = f"{upload_path}/{filename}"
+    #Get all the file information
+    file_size = convert_size(os.path.getsize(file_path))
+    created_at = time.ctime(os.path.getmtime(file_path))
+    file_extension = pathlib.Path(file.filename).suffix
+    #Save to json
+    save_json(filename, file_size, file_extension, created_at, upload_path)
 
     return ("Success!")
 
@@ -179,4 +192,13 @@ def delete_file(filename):
     path = os.path.join(location, filename)
     os.remove(path)
     flash(f'File "{filename}" was deleted succesfully.')
+    return redirect(url_for('main.index'))
+
+
+@main.route('/save-settings/<image_quality>')
+def image_settings(image_quality):
+
+    save_settings(image_quality)
+
+    flash("Image upload settings were saved successfully!")
     return redirect(url_for('main.index'))

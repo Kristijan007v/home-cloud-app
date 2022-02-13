@@ -1,8 +1,10 @@
 from datetime import datetime
+from operator import concat
 from flask import *
 from fpdf import FPDF
 import ipinfo
-from requests import get 
+from requests import get
+import json 
 
 time_now = datetime.now()
 write_date = time_now.strftime('%a %b %d')
@@ -84,7 +86,25 @@ def txt_to_pdf(logName):
     # save the pdf with name .pdf
     pdf.output(f"static/Cloud/{email}/Folders/Reports/documents/{filename}.pdf")
 
-   
+
+def save_json(filename, filesize, fileext, created_at, upload_path):
+  
+    # Data to be written
+    dictionary ={
+        "file_name" : str(f"{filename}"),
+        "file_size" : str(f"{filesize}"),
+        "file_exstension" : str(f"{fileext}"),
+        "created_at" : str(f"{created_at}")
+    }
+    
+    # Serializing json 
+    json_object = json.dumps(dictionary, indent = 4)
+    
+    #Saving json file
+    new_name = f"{filename}.json"
+    save_to = f"{upload_path}/data/{new_name}"
+    with open(save_to, "w") as outfile:
+        outfile.write(json_object)
 
 
-
+""" def save_xml(): """

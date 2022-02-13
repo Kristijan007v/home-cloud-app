@@ -41,11 +41,13 @@
     {% endif %} {% endwith %}
 
     <!-- Container used to display DEV DEBUG INFO -->
+    {% if 'yes' == ip_info %}
     {% if ip_address and location is defined %}
     <div class="debug-info bg-red-500 p-4 flex justify-between text-white">
       <p>Your IP: {{ip_address}}, Location: {{location}}</p>
       <button>Don't display</button>
     </div>
+    {% endif %}
     {% endif %}
 
 
@@ -320,6 +322,13 @@
               class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
             ></label>
           </div>
+        </div>
+        <p class="text-xl mt-4">Upload quality -<span class="font-bold text-blue-600"> Original</span></p>
+        <div class="dark:bg-gray-700 bg-gray-200 rounded-md p-2 mt-4 flex justify-center gap-4">
+          <a class="hover:text-blue-600 hover:font-bold" href="/save-settings/100">Original</a>
+          <a class="hover:text-blue-600 hover:font-bold" href="/save-settings/80">High</a>
+          <a class="hover:text-blue-600 hover:font-bold" href="/save-settings/50">Medium</a>
+          <a class="hover:text-blue-600 hover:font-bold" href="/save-settings/20">Low</a>
         </div>
         <p class="text-xl mt-4">Keyboard shortcuts</p>
         <p class="dark:bg-gray-700 bg-gray-200 rounded-md p-2 mt-4">
