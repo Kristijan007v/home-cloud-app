@@ -58,9 +58,10 @@ def pass_info():
 
     ip_address, location = get_info()
     email = session['email']
-    image_quality, ip_info = load_settings()
+    image_quality_str, image_quality, ip_info, show_folders = load_settings()
 
-    return dict(ip_address = ip_address, location = location, email=email, image_quality = image_quality, ip_info = ip_info)
+    return dict(ip_address = ip_address, location = location, email=email, image_quality = image_quality,
+     image_quality_str = image_quality_str, ip_info = ip_info, show_folders = show_folders)
 
 
 @main.route('/alert-test')
@@ -198,7 +199,31 @@ def delete_file(filename):
 @main.route('/save-settings/<image_quality>')
 def image_settings(image_quality):
 
-    save_settings(image_quality)
+    section = 'image'
+    setting = 'upload_quality'
+    save_settings(section, setting, image_quality)
 
     flash("Image upload settings were saved successfully!")
+    return redirect(url_for('main.index'))
+
+
+@main.route('/save-ip-settings/<ip_setting>')
+def ip_settings(ip_setting):
+
+    section = 'layout'
+    setting = 'ip_info'
+    save_settings(section, setting, ip_setting)
+
+    flash("IP layout settings were saved successfully!")
+    return redirect(url_for('main.index'))
+
+
+@main.route('/save-folders-settings/<folders_settings>')
+def folders_settings(folders_settings):
+
+    section = 'layout'
+    setting = 'show_folders'
+    save_settings(section, setting, folders_settings)
+
+    flash("Settings were saved successfully!")
     return redirect(url_for('main.index'))
