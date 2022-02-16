@@ -30,6 +30,11 @@
         </div>
         <a href="{{ url_for('auth.reset_password') }}" class="btn-field">Reset your password</a>
         <a href="{{ url_for('cloud.generate_pdf') }}" class="btn-field">Generate login report</a>
+        {% if 'True' == logging_value %}
+        <a href="/manage-logging/False" class="btn-field">Turn off logging</a>
+        {% else %}
+        <a href="/manage-logging/True" class="btn-field">Turn on logging</a>
+        {% endif %}
         <!-- <a href="{{ url_for('auth.logout') }}" class="btn-field">Logout</a> -->
         <button class="btn-d-field" onclick="deletePopupOpen()">Delete account</button>
     </div>

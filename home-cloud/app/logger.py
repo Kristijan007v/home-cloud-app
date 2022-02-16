@@ -6,6 +6,7 @@ import ipinfo
 from requests import get
 from docx import Document
 import zeep
+from config import *
 
 time_now = datetime.now()
 write_date = time_now.strftime('%a %b %d')
@@ -41,9 +42,11 @@ def get_info():
     #Get the browser user is using while visiting Home-cloud
     user_browser = request.headers.get('User-Agent')
 
-    #Save retrieved info to log using log() function
-    log_json(location, ip_address, user_browser, logName)
-    log(location, ip_address, user_browser, user_country, logName)
+    logging_state = get_reg('LOG_DATA')
+    if logging_state == 'True':
+        #Save retrieved info to log using log() function
+        log_json(location, ip_address, user_browser, logName)
+        log(location, ip_address, user_browser, user_country, logName)
 
     #Return ip and location for further use in application
     return ip_address, location

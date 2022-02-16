@@ -3,8 +3,9 @@ from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from logger import get_info, save_json
 from models import db
+import json
 import requests
-from config import load_settings, save_settings
+from config import load_settings, save_settings, get_reg, set_reg
 import pathlib
 import time
 import math
@@ -59,9 +60,13 @@ def pass_info():
     ip_address, location = get_info()
     email = session['email']
     image_quality_str, image_quality, ip_info, show_folders = load_settings()
+    logging_value = get_reg('LOG_DATA')
+    show_images = get_reg('SHOW_IMAGES')
+    show_files = get_reg('SHOW_FILES')
 
     return dict(ip_address = ip_address, location = location, email=email, image_quality = image_quality,
-     image_quality_str = image_quality_str, ip_info = ip_info, show_folders = show_folders)
+     image_quality_str = image_quality_str, ip_info = ip_info,
+      show_folders = show_folders, logging_value = logging_value, show_images = show_images, show_files = show_files)
 
 
 @main.route('/alert-test')
@@ -79,7 +84,22 @@ def send_alerts():
         request_url = f"http://127.0.0.1:5000//email"
         requests.get(request_url)
     return redirect(url_for('main.index'))
+
+#Render index welcome page
+@main.route('/')
+@login_required
+def welcome():
+    weather_path = 'static/Cloud/Weather/weather.json'
+    f = open(weather_path)
+    parse_json = json.load(f)
+    temp = parse_json['temperature']
+    pressure = parse_json['pressure']
+    humidity = parse_json['humidity']
+    f.close()
     
+
+    return render_template('welcome.html', temp = temp, pressure = pressure, humidity = humidity)
+
 
 #Render a profile page
 @main.route('/profile')
@@ -226,4 +246,30 @@ def folders_settings(folders_settings):
     save_settings(section, setting, folders_settings)
 
     flash("Settings were saved successfully!")
+    return redirect(url_for('main.index'))
+
+
+@main.route('/manage-logging/<value>')
+def logging(value):
+    set_reg('LOG_DATA', value)
+    flash("Logging settings were applied successfully!")
+    return redirect(url_for('main.profile'))
+
+@main.route('/search', methods=['POST'])
+def search():
+    term = request.form.get('term')
+
+    if term == 'imhide':
+        set_reg('SHOW_IMAGES', 'False')
+        flash("Image section set to hide!")
+    elif term == 'imshow':
+        set_reg('SHOW_IMAGES', 'True')
+        flash("Image section set to show!")
+    elif term == 'fhide':
+        set_reg('SHOW_FILES', 'False')
+        flash("Files section set to hide!")
+    elif term == 'fshow':
+        set_reg('SHOW_FILES', 'True')
+        flash("Files section set to show!")
+    
     return redirect(url_for('main.index'))

@@ -9,6 +9,15 @@ import os
 cloud = Blueprint('cloud', __name__)
 
 
+
+@cloud.context_processor
+def pass_folder():
+
+    email = session['email']
+
+    return dict(email=email)
+
+
 #Create a folder with a requested name on the server
 @cloud.route('/create-folder', methods=['POST'])
 @login_required
