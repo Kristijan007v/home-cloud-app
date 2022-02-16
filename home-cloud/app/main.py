@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, session, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
-from .logger import get_info, save_json
-from . import db
+from logger import get_info, save_json
+from models import db
 import requests
-from .config import load_settings, save_settings
+from config import load_settings, save_settings
 import pathlib
 import time
 import math

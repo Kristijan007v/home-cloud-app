@@ -1,5 +1,19 @@
 import configparser
 
+def set_settings():
+    CONFIG_PATH = "settings.ini"
+    section = ['image', 'layout']
+    setting = ['upload_quality', 'ip_info', '']
+    value = ['50']
+
+
+    config= configparser.ConfigParser()
+    config.read(CONFIG_PATH)
+    config.set(f"{section}", f"{setting}", f"{value}")
+    cfgfile = open(CONFIG_PATH, 'w')
+    config.write(cfgfile)
+    cfgfile.close()
+
 
 def load_settings():
     

@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 from flask_login import login_required
-from .logger import txt_to_pdf
+from logger import txt_to_pdf, txt_to
 from pathlib import Path
-from . import db
+from models import db
 import os
 
 
@@ -83,6 +83,8 @@ def generate_pdf():
     
     email = session['email']
     logName = f"{email}-login-logs.txt"
+    extension = 'rtf'
     txt_to_pdf(logName)
+    txt_to(extension, logName)
 
     return redirect(url_for('cloud.load_folder', folder = 'Reports'))
