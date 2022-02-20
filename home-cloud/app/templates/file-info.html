@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% block content %}
+<div
+  class="welcome text-center text-white text-3xl flex flex-col gap-4 p-6 mt-12 bg-gray-800 rounded-md w-3/5 m-auto"
+>
+  <p>INFO</p>
+
+  <p>File name: {{filename}}</p>
+  <p>File size: {{file_size}}</p>
+  <p>File extension: {{ext}}</p>
+  <p>Uploaded on: {{created_at}}</p>
+  <p>Signature: {{signature}}</p>
+
+  <a href="/edit-file-info/{{filename}}" class="btn-field">Edit info</a>
+</div>
+{% endblock %}

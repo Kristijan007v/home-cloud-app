@@ -1,0 +1,8 @@
+
+Sun Feb 20 2022 02:54:36  - Connecting to db
+Sun Feb 20 2022 02:54:36 [*] Server is listening as 172.26.176.1 at port 5001
+Sun Feb 20 2022 03:13:19  - Connecting to db
+Sun Feb 20 2022 03:13:19 [*] Server is listening as 172.26.176.1 at port 5001
+Sun Feb 20 2022 03:31:32  - Connecting to db
+Sun Feb 20 2022 03:31:32 [*] Server is listening as 192.168.8.157 at port 5001
+Sun Feb 20 2022 03:31:32 [+] ('192.168.8.100', 50707) is connected.

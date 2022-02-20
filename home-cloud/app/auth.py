@@ -45,7 +45,7 @@ def login_post():
 
     #Decrypt documents upon user login
     foldername = 'documents'
-    decrypt_folder(email, foldername)
+    #decrypt_folder(email, foldername)
 
     User.login(email, password, remember)
 

@@ -129,9 +129,23 @@ def save_json(filename, filesize, fileext, created_at, upload_path):
     
     #Saving json file
     new_name = f"{filename}.json"
-    save_to = f"{upload_path}/data/{new_name}"
+    save_to = f"{upload_path}/{new_name}"
     with open(save_to, "w") as outfile:
         outfile.write(json_object)
+
+def load_json(email, image_name):
+    info_path = f'static/Cloud/{email}/images/{image_name}.json'
+    f = open(info_path)
+    parse_json = json.load(f)
+    file_name = parse_json['file_name']
+    file_size = parse_json['file_size']
+    file_exstension = parse_json['file_exstension']
+    created_at = parse_json['created_at']
+    f.close()
+
+
+
+    return file_name, file_size, file_exstension, created_at
 
 
 def log_json(location, user_ip, user_browser, logName):
