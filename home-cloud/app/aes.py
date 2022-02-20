@@ -2,7 +2,9 @@ from json import load
 from cryptography.fernet import Fernet
 import os
 
-#Generate encryption key
+# Generate encryption key
+
+
 def write_key(email):
 
     key = Fernet.generate_key()
@@ -11,19 +13,19 @@ def write_key(email):
         key_file.write(key)
 
 
-#Load encryption key
+# Load encryption key
 def load_key(email):
-    
-    #Loads the key from the current directory named `key.key`
+
+    # Loads the key from the current directory named `key.key`
     load_from = f"static/Cloud/{email}/Settings/{email}.key"
     return open(load_from, "rb").read()
 
 
-#Encrypt given file
+# Encrypt given file
 def encrypt(filename, key):
-    
-    #Given a filename (str) and key (bytes), it encrypts the file and write it
-   
+
+    # Given a filename (str) and key (bytes), it encrypts the file and write it
+
     f = Fernet(key)
     with open(filename, "rb") as file:
         # read all file data
@@ -35,11 +37,11 @@ def encrypt(filename, key):
         file.write(encrypted_data)
 
 
-#Decrypt given file
+# Decrypt given file
 def decrypt(filename, key):
-    
-    #Given a filename (str) and key (bytes), it decrypts the file and write it
-   
+
+    # Given a filename (str) and key (bytes), it decrypts the file and write it
+
     f = Fernet(key)
     with open(filename, "rb") as file:
         # read the encrypted data
@@ -51,18 +53,18 @@ def decrypt(filename, key):
         file.write(decrypted_data)
 
 
-#Encrypt given folder
+# Encrypt given folder
 def encrypt_folder(email, foldername):
-    basepath = f"static/Cloud/{email}/{foldername}"
+    basepath = f"static/Cloud/{email}/{foldername}/"
     key = load_key(email)
     for filename in os.listdir(basepath):
         file = os.path.join(basepath, filename)
         encrypt(file, key)
 
 
-#Decrypt given folder
+# Decrypt given folder
 def decrypt_folder(email, foldername):
-    basepath = f"static/Cloud/{email}/{foldername}"
+    basepath = f"static/Cloud/{email}/{foldername}/"
     key = load_key(email)
     for filename in os.listdir(basepath):
         file = os.path.join(basepath, filename)
@@ -72,4 +74,3 @@ def decrypt_folder(email, foldername):
 """ email = 'kiki.vidovic.6969@gmail.com'
 #write_key(email)
 decrypt_folder(email, 'images') """
-

@@ -9,6 +9,11 @@
   <p>File extension: {{ext}}</p>
   <p>Uploaded on: {{created_at}}</p>
   <p>Signature: {{signature}}</p>
+  {% if True == status %}
+  <p class="text-red-500">Your file was tampered, beware!</p>
+  {% else %}
+  <p class="text-green-500">Your file was not tampered, relax.</p>
+  {% endif %}
 
   <a href="/edit-file-info/{{filename}}" class="btn-field">Edit info</a>
 </div>

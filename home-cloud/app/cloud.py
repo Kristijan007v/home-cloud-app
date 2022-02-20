@@ -159,11 +159,19 @@ def image_rename(image_name):
 def file_info(filename):
 
     email = session['email']
+    file = f"static/Cloud/{email}/documents/{filename}"
     file_name, file_size, created_at, signature = File.load_info(
         email, filename, 0, get_all=True)
 
+    check_signature = digital_signature(file)
+
+    if signature != check_signature:
+        status = True
+    else:
+        status = False
+
     return render_template('file-info.html', filename=filename, file_name=file_name,
-                           file_size=file_size, created_at=created_at, signature=signature)
+                           file_size=file_size, created_at=created_at, signature=signature, status=status)
 
 
 @cloud.route('/edit-file-info/<filename>')
