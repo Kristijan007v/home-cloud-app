@@ -228,16 +228,22 @@ def file_rename(filename):
     email = session['email']
     new_name = request.form.get('new_name')
     file_path = f"static/Cloud/{email}/documents/{filename}"
-    file_path_new = f"static/Cloud/{email}/documents/{new_name}"
-    os.rename(file_path, file_path_new)
 
-    xml_path = f"static/Cloud/{email}/documents/{filename}.xml"
-    xml_path_new = f"static/Cloud/{email}/documents/{new_name}.xml"
-    os.rename(xml_path, xml_path_new)
+    if exists(file_path):
+        file_path_new = f"static/Cloud/{email}/documents/{new_name}"
+        os.rename(file_path, file_path_new)
 
-    #File.update_info(filename, new_name)
+        xml_path = f"static/Cloud/{email}/documents/{filename}.xml"
+        xml_path_new = f"static/Cloud/{email}/documents/{new_name}.xml"
+        os.rename(xml_path, xml_path_new)
 
-    flash("File was renamed succesfully!")
+        #File.update_info(filename, new_name)
+
+        flash("File was renamed succesfully!")
+
+    else:
+        flash("There was an error!")
+
     return redirect(url_for('main.index'))
 
 
