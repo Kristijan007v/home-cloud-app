@@ -1,87 +1,119 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
 <!-- Profile information -->
 <div class="bg-gray-800 rounded-md mt-16 w-5/6 md:w-3/6 p-6 mx-auto mb-14">
-    <h3 class="title-center">
-        Your profile
-    </h3>
-    <div class="info mt-4 pb-6 flex flex-col gap-4">
-        <img class="w-3/5 md:2/5 lg:w-1/5 rounded-full border-4 border-blue-600 shadow-md mx-auto" src="https://randomuser.me/api/portraits/men/41.jpg" alt="user image" />
-<!--         <form class="text-center" action="">
+  <h3 class="title-center">Your profile</h3>
+  <div class="info mt-4 pb-6 flex flex-col gap-4">
+    <img
+      class="w-3/5 md:2/5 lg:w-1/5 rounded-full border-4 border-blue-600 shadow-md mx-auto"
+      src="https://randomuser.me/api/portraits/men/41.jpg"
+      alt="user image"
+    />
+    <!--         <form class="text-center" action="">
             <input type="file" name="" id="">
         </form> -->
-        {% if disk_used_int is defined %}
-        <div class="special-field-blue mb-10">
-            {% if disk_used_int < 160 %}
-            <p>Used {{disk_used}} of 1.0 GB storage.</p>
-            {% else %}
-            <p>Storage is full. ({{disk_used}})</p>
-            {% endif %}
-        </div>
-        {% endif %}
-        <div class="special-field">
-            Name: {{name}}
-        </div>
-        <div class="special-field">
-            Email: {{email}}
-        </div>
-        <a href="{{ url_for('auth.reset_password') }}" class="btn-field">Reset your password</a>
-        <a href="{{ url_for('cloud.generate_pdf') }}" class="btn-field">Generate login report</a>
-        {% if 'True' == logging_value %}
-        <a href="/manage-logging/False" class="btn-field">Turn off logging</a>
-        {% else %}
-        <a href="/manage-logging/True" class="btn-field">Turn on logging</a>
-        {% endif %}
-        <!-- <a href="{{ url_for('auth.logout') }}" class="btn-field">Logout</a> -->
-        <button class="btn-d-field" onclick="deletePopupOpen()">Delete account</button>
+    {% if disk_used_int is defined %}
+    <div class="special-field-blue mb-10">
+      {% if disk_used_int < 1024 %}
+      <p>Used {{disk_used}} of 1.0 GB storage.</p>
+      {% else %}
+      <p>Storage is full. ({{disk_used}})</p>
+      {% endif %}
     </div>
+    {% endif %}
+    <div class="special-field">Name: {{name}}</div>
+    <div class="special-field">Email: {{email}}</div>
+    <a href="{{ url_for('auth.reset_password') }}" class="btn-field"
+      >Reset your password</a
+    >
+    <a href="{{ url_for('cloud.generate_pdf') }}" class="btn-field"
+      >Generate login report</a
+    >
+    {% if 'True' == logging_value %}
+    <a href="/manage-logging/False" class="btn-field">Turn off logging</a>
+    {% else %}
+    <a href="/manage-logging/True" class="btn-field">Turn on logging</a>
+    {% endif %}
+    <!-- <a href="{{ url_for('auth.logout') }}" class="btn-field">Logout</a> -->
+    <button class="btn-d-field" onclick="deletePopupOpen()">
+      Delete account
+    </button>
+  </div>
 </div>
-
 
 <!-- Delete account popup -->
-<div id="delete-popup" class="dark:bg-gray-400/70 dark:text-white fixed top-0 bottom-0 left-0 right-0 z-10 hidden">
-    <div class="delete-confirmation dark:bg-gray-800 bg-white w-full md:w-1/4 mt-12 m-auto p-8 rounded-md">
-        <button onclick="deletePopupClose()">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>  
-        </button>  
-        <p class="title-center">Are you absolutely sure?</p>
-<!--         <div class="warning p-4 bg-amber-700">
+<div
+  id="delete-popup"
+  class="dark:bg-gray-400/70 dark:text-white fixed top-0 bottom-0 left-0 right-0 z-10 hidden"
+>
+  <div
+    class="delete-confirmation dark:bg-gray-800 bg-white w-full md:w-1/4 mt-12 m-auto p-8 rounded-md"
+  >
+    <button onclick="deletePopupClose()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    </button>
+    <p class="title-center">Are you absolutely sure?</p>
+    <!--         <div class="warning p-4 bg-amber-700">
             Unexpected bad things will happen if you don’t read this!
         </div> -->
-        <div class="prompt mt-6">
-            <p>This action cannot be undone. This will permanently delete your <strong>{{email}}</strong>
-                 account data and all of your files.</p>
-            <p class="mt-6 mb-2">
-                Please type <strong>{{email}}</strong> to confirm.
-            </p>
-            <form action="/delete-account" method="POST">
-                <input class="input-text" type="text" name="delete-confirmation" id="delete-confirmation">
-                <input class="btn-delete mt-4" type="submit" value="Delete">
-            </form>
-        </div>
+    <div class="prompt mt-6">
+      <p>
+        This action cannot be undone. This will permanently delete your
+        <strong>{{email}}</strong> account data and all of your files.
+      </p>
+      <p class="mt-6 mb-2">
+        Please type <strong>{{email}}</strong> to confirm.
+      </p>
+      <form action="/delete-account" method="POST">
+        <input
+          class="input-text"
+          type="text"
+          name="delete-confirmation"
+          id="delete-confirmation"
+        />
+        <input class="btn-delete mt-4" type="submit" value="Delete" />
+      </form>
     </div>
+  </div>
 </div>
 
-{% endblock %}
-
-{% block scripts %}
-
+{% endblock content %} {% block scripts %}
 <script>
+  var delete_popup = document.getElementById("delete-popup");
+  function deletePopupOpen() {
+    delete_popup.style.display = "block";
+  }
 
-    var delete_popup = document.getElementById('delete-popup');
-    function deletePopupOpen(){
-        delete_popup.style.display = "block"
-    }
-
-    function deletePopupClose(){
-        delete_popup.style.display = "none"
-    }
-
-
+  function deletePopupClose() {
+    delete_popup.style.display = "none";
+  }
 </script>
+
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement(
+      { pageLanguage: "en" },
+      "google_translate_element"
+    );
+  }
+</script>
+
+<script
+  type="text/javascript"
+  src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+></script>
 
 {% endblock scripts %}
