@@ -6,7 +6,7 @@
 <!-- Pages navigation -->
 <div class="p-4 flex justify-start">
     <div class="w-4/5 mx-auto">
-        <ul class="text-white flex justify-center items-center gap-4 text-xl bg-gray-800 w-1/5 mt-6 rounded-md p-2">
+        <ul class="text-white flex justify-center items-center gap-4 text-xl bg-gray-800 w-3/6 lg:w-1/5 mt-6 rounded-md p-2">
           <li class="hover:rounded-md p-2 cursor-pointer">
             <a class="hover:underline" href="{{ url_for('main.index') }}">My cloud</a>
           </li>
@@ -25,7 +25,7 @@
   <div class="pictures-section mt-0 p-4 w-5/6 md:w-4/5 mx-auto">
     <p class="title">Images</p>
     {% if images_number > 0 %}
-    <div class="border-t-2 border-gray-600 grid grid-cols-2 md:grid-cols-4 gap-4 p-8">
+    <div class="border-t-2 border-gray-600 grid grid-cols-1 md:grid-cols-4 gap-4 p-8">
     {% for hist, image_name in hists %}
     <div class="image rounded-md shadow-xl hover:border-gray-400 hover:-translate-y-4 hover:duration-700 cursor-pointer">
         <img class="rounded-t-md" src="{{hist}}" alt="{{hist}}" srcset="" />

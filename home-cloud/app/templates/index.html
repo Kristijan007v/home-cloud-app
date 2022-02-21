@@ -5,7 +5,7 @@
   <!-- Pages navigation -->
 <div class="p-4 flex justify-start">
   <div class="w-4/5 mx-auto">
-      <ul class="text-white flex justify-center gap-4 text-xl bg-gray-800 w-1/6 mt-6 rounded-md p-2">
+      <ul class="text-white flex justify-center gap-4 text-xl bg-gray-800 w-3/6 lg:w-1/5 mt-6 rounded-md p-2">
           <a class="hover:underline" href="{{ url_for('main.index') }}">My cloud</a>
       </ul>
   </div>
@@ -16,7 +16,7 @@
   <div class="pictures-section mt-0 p-4 w-5/6 md:w-4/5 mx-auto">
     <p class="title">Images</p>
     {% if images_number > 0 %}
-    <div class="border-t-2 border-gray-600 grid grid-cols-2 md:grid-cols-4 gap-4 p-8">
+    <div class="border-t-2 border-gray-600 grid grid-cols-1 md:grid-cols-4 gap-4 p-8">
     {% for hist, image_name in hists %}
     <div class="image rounded-md shadow-xl hover:border-gray-400 hover:-translate-y-4 hover:duration-700 cursor-pointer">
         <img class="rounded-t-md" src="{{hist}}" alt="{{hist}}" srcset="" />
@@ -111,7 +111,7 @@
      <!-- Load folders from server -->
      <div class="mt-0 p-4 mb-20 w-5/6 md:w-4/5 mx-auto">
       <p class="title">Folders</p>
-      <div class="border-t-2 border-gray-600 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 p-8">
+      <div class="border-t-2 border-gray-600 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 p-8">
           {% for folder in subfolders%}
           <div class="dark:bg-gray-800 bg-white p-4 rounded-md border-2 dark:border-gray-700 hover:border-gray-400 hover:duration-700 cursor-pointer flex justify-between overflow-hidden">
             <div class="flex gap-2">
