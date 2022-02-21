@@ -1,0 +1,24 @@
+{% extends "base.html" %} {% block content %}
+<div
+  class="welcome text-center text-white text-3xl flex flex-col gap-4 p-6 mt-12 bg-gray-800 rounded-md w-3/5 m-auto"
+>
+  <p>INFO</p>
+
+  <p>File name: {{filename}}</p>
+  <p>File size: {{file_size}}</p>
+  <p>File extension: {{ext}}</p>
+  <p>Uploaded on: {{created_at}}</p>
+  <p>Signature: {{signature}}</p>
+  {% if True == status %}
+  <p class="text-red-500">Your file was tampered, beware!</p>
+  {% else %}
+  <p class="text-green-500">Your file was not tampered, relax.</p>
+  {% endif %} {% if False == folder %}
+  <a href="/edit-file-info/{{filename}}/no" class="btn-field">Edit info</a>
+  {% else %}
+  <a href="/edit-file-info/{{filename}}/{{foldername}}" class="btn-field"
+    >Edit info</a
+  >
+  {% endif %}
+</div>
+{% endblock %}

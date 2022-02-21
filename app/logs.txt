@@ -1,0 +1,74 @@
+
+Sun Feb 20 2022 23:57:22  - Connecting to db
+Sun Feb 20 2022 23:57:22 [*] Server is listening as 192.168.8.157 at port 5001
+Sun Feb 20 2022 23:57:22 [+] ('192.168.8.100', 57708) is connected.
+Mon Feb 21 2022 00:17:52  - Connecting to db
+Mon Feb 21 2022 00:18:19  - Connecting to db
+Mon Feb 21 2022 00:18:19 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 00:18:19 [+] ('192.168.8.100', 57379) is connected.
+Mon Feb 21 2022 00:24:35  - Connecting to db
+Mon Feb 21 2022 00:24:35 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 00:28:50  - Connecting to db
+Mon Feb 21 2022 00:28:50  - Connecting to db
+Mon Feb 21 2022 00:28:50 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 00:30:43  - Connecting to db
+Mon Feb 21 2022 00:30:43  - Connecting to db
+Mon Feb 21 2022 00:30:49  - Connecting to db
+Mon Feb 21 2022 00:30:50  - Connecting to db
+Mon Feb 21 2022 00:32:26  - Connecting to db
+Mon Feb 21 2022 00:32:33  - Connecting to db
+Mon Feb 21 2022 00:32:41  - Connecting to db
+Mon Feb 21 2022 00:32:58  - Connecting to db
+Mon Feb 21 2022 00:34:53  - Connecting to db
+Mon Feb 21 2022 00:34:53 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 00:35:37  - Connecting to db
+Mon Feb 21 2022 00:35:37 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 00:36:38  - Connecting to db
+Mon Feb 21 2022 00:36:38 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 00:38:02  - Connecting to db
+Mon Feb 21 2022 00:38:02 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:11:26  - Connecting to db
+Mon Feb 21 2022 01:11:26 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:11:26 [+] ('192.168.8.157', 60965) is connected.
+Mon Feb 21 2022 01:12:06  - Connecting to db
+Mon Feb 21 2022 01:12:06 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:12:06 [+] ('192.168.8.157', 60980) is connected.
+Mon Feb 21 2022 01:13:00  - Connecting to db
+Mon Feb 21 2022 01:13:00 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:13:00 [+] ('192.168.8.157', 60996) is connected.
+Mon Feb 21 2022 01:13:29  - Connecting to db
+Mon Feb 21 2022 01:13:29 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:13:29 [+] ('192.168.8.157', 61005) is connected.
+Mon Feb 21 2022 01:25:44  - Connecting to db
+Mon Feb 21 2022 01:25:44 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:25:44 [+] ('192.168.8.157', 60211) is connected.
+Mon Feb 21 2022 01:27:15  - Connecting to db
+Mon Feb 21 2022 01:27:15 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:27:15 [+] ('192.168.8.157', 60230) is connected.
+Mon Feb 21 2022 01:27:15 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:27:15 [+] ('192.168.8.157', 60234) is connected.
+Mon Feb 21 2022 01:27:15 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:28:44  - Connecting to db
+Mon Feb 21 2022 01:28:44 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:28:44 [+] ('192.168.8.157', 60250) is connected.
+Mon Feb 21 2022 01:39:19  - Connecting to db
+Mon Feb 21 2022 01:39:19 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:39:19 [+] ('192.168.8.157', 57956) is connected.
+Mon Feb 21 2022 01:44:13  - Connecting to db
+Mon Feb 21 2022 01:44:13 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:44:13 [+] ('192.168.8.157', 55362) is connected.
+Mon Feb 21 2022 01:44:52  - Connecting to db
+Mon Feb 21 2022 01:44:52 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:44:52 [+] ('192.168.8.157', 55374) is connected.
+Mon Feb 21 2022 01:48:02  - Connecting to db
+Mon Feb 21 2022 01:48:02 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:48:02 [+] ('192.168.8.157', 55455) is connected.
+Mon Feb 21 2022 01:51:03  - Connecting to db
+Mon Feb 21 2022 01:51:03 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:51:03 [+] ('192.168.8.157', 64046) is connected.
+Mon Feb 21 2022 01:53:30  - Connecting to db
+Mon Feb 21 2022 01:53:30 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:53:30 [+] ('192.168.8.157', 64091) is connected.
+Mon Feb 21 2022 01:57:41  - Connecting to db
+Mon Feb 21 2022 01:57:41 [*] Server is listening as 192.168.8.157 at port 5001
+Mon Feb 21 2022 01:57:41 [+] ('192.168.8.157', 56015) is connected.
