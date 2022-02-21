@@ -331,8 +331,12 @@ def delete_image(image_name):
     location = f"static/Cloud/{email}/images"
     json_location = f"static/Cloud/{email}/images/{image_name}.json"
     path = os.path.join(location, image_name)
-    os.remove(path)
-    os.remove(json_location)
+
+    if exists(json_location):
+        os.remove(path)
+        os.remove(json_location)
+    else:
+        os.remove(path)
     flash(f'Image "{image_name}" was deleted succesfully.')
     return redirect(url_for('main.index'))
 

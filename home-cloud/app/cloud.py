@@ -113,11 +113,18 @@ def generate_pdf():
 def image_info(image_name):
 
     email = session['email']
-    file_name, file_size, ext, created_at = load_json(email, image_name)
 
-    return render_template('image-info.html',
-                           image_name=image_name, file_name=file_name, file_size=file_size, ext=ext, created_at=created_at)
+    json_name = f"{image_name}.json"
+    check_path = f"static/Cloud/{email}/images/{json_name}"
 
+    if exists(check_path):
+        file_name, file_size, ext, created_at = load_json(email, image_name)
+        return render_template('image-info.html',
+                               image_name=image_name, file_name=file_name, file_size=file_size,
+                               ext=ext, created_at=created_at)
+    else:
+        flash("JSON info file does not exist!")
+        return redirect(url_for('main.index'))
 # Show image info from XML
 
 
