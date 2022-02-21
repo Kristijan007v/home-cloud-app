@@ -1,3 +1,4 @@
+from genericpath import exists
 from flask import Blueprint, render_template, redirect, url_for, request, flash, session, send_file, send_from_directory, Markup
 from flask_login import login_required
 from logger import txt_to_pdf, txt_to, load_json
@@ -171,19 +172,25 @@ def file_info(filename, foldername):
         file = f"{base_path}/{filename}"
         folder = True
 
-    file_name, file_size, created_at, signature = File.load_info(
-        email, base_path, filename, 0, get_all=True)
+    xml_check = f"{base_path}/{filename}.xml"
 
-    check_signature = digital_signature(file)
+    if exists(xml_check):
+        file_name, file_size, created_at, signature = File.load_info(
+            email, base_path, filename, 0, get_all=True)
 
-    if signature != check_signature:
-        status = True
+        check_signature = digital_signature(file)
+
+        if signature != check_signature:
+            status = True
+        else:
+            status = False
+
+        return render_template('file-info.html', filename=filename, file_name=file_name,
+                               file_size=file_size, created_at=created_at, signature=signature, status=status,
+                               folder=folder, foldername=foldername)
     else:
-        status = False
-
-    return render_template('file-info.html', filename=filename, file_name=file_name,
-                           file_size=file_size, created_at=created_at, signature=signature, status=status,
-                           folder=folder, foldername=foldername)
+        flash("XML info file does not exist!")
+        return redirect(url_for('main.index'))
 
 
 @cloud.route('/edit-file-info/<filename>/<foldername>')
