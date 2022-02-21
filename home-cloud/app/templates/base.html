@@ -70,7 +70,7 @@
     {% if 'yes' == ip_info %} {% if ip_address and location is defined %}
     <div class="debug-info bg-red-500 p-4 flex justify-between text-white">
       <p>Your IP: {{ip_address}}, Location: {{location}}</p>
-      <button>Don't display</button>
+      <a class="hover:underline" href="/save-ip-settings/no">Don't display</a href="/save-ip-settings/no">
     </div>
     {% endif %} {% endif %}
 
@@ -79,7 +79,9 @@
       class="flex justify-between p-4 bg-blue-600 text-white sticky top-0 z-9"
     >
       <span class="p-2 text-white font-bold">
-        <a href="{{ url_for('main.index') }}">Home Cloud</a>
+        <a href="{{ url_for('main.index') }}"
+          ><span class="notranslate">Home Cloud</span></a
+        >
       </span>
       {% if current_user.is_authenticated %}
       <div
