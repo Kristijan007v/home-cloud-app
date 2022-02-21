@@ -6,6 +6,7 @@ from logger import get_info
 from models import User, db
 from pathlib import Path
 from aes import *
+from rsaa import *
 import os
 import shutil
 from classes import Log
@@ -42,6 +43,8 @@ def login_post():
     password = request.form.get('password')
     remember = True if request.form.get('remember') else False
 
+    # Decrypt AES key with RSA
+    rsa_decrypt(email)
     # Decrypt documents upon user login
     foldername = 'documents'
     decrypt_folder(email, foldername)
@@ -67,6 +70,8 @@ def signup_post():
 
     # Generate AES ENCRYPTION KEY
     write_key(email)
+    # Encrypt generated key with RSa
+    rsa_encrypt(email)
 
     return redirect(url_for('auth.login'))
 
@@ -137,8 +142,10 @@ def delete_account():
 def logout():
     email = session['email']
     foldername = 'documents'
-    # Encrypt documents before logout
+    # Encrypt documents before logout with AES
     encrypt_folder(email, foldername)
+    # Enrypt AES key with RSA
+    rsa_encrypt(email)
 
     logout_user()
     return redirect(url_for('auth.login'))

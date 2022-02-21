@@ -1,3 +1,4 @@
+import email
 import ip
 from serverlogger import log
 import sendmail
@@ -18,6 +19,7 @@ SERVER_PORT = 5001
 BUFFER_SIZE = 4096
 SEPARATOR = "<SEPARATOR>"
 
+
 # create the server socket
 # TCP socket
 s = socket.socket()
@@ -25,7 +27,7 @@ s = socket.socket()
 # bind the socket to our local address
 s.bind((SERVER_HOST, SERVER_PORT))
 
-# enabling our server to accept connections
+# enabling server to accept connections
 # 5 here is the number of unaccepted connections that
 # the system will allow before refusing new connections
 s.listen(5)
@@ -44,18 +46,21 @@ file_handler.create_folder('TEST')
 # receive the file infos
 # receive using client socket, not server socket
 received = client_socket.recv(BUFFER_SIZE).decode()
-filename, filesize = received.split(SEPARATOR)
+filename, filesize, user_email = received.split(SEPARATOR)
 # remove absolute path if there is
 filename = os.path.basename(filename)
+
+# Place to save transfered file
+save_to = f"static/Cloud/{user_email}/Computers/{filename}"
+
 # convert to integer
 filesize = int(filesize)
-
 
 # start receiving the file from the socket
 # and writing to the file stream
 progress = tqdm.tqdm(range(
     filesize), f"Receiving {filename}", unit="B", unit_scale=True, unit_divisor=1024)
-with open(filename, "wb") as f:
+with open(save_to, "wb") as f:
     while True:
         # read 1024 bytes from the socket (receive)
         bytes_read = client_socket.recv(BUFFER_SIZE)

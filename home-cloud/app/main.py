@@ -145,6 +145,20 @@ def index():
                 file_list.append(temp)
                 files_number += 1
 
+    # Load and render all the sync files from the server for the current user
+    basepath = f"static/Cloud/{email}/Computers"
+    dir = os.walk(basepath)
+    sync_list = []
+    sync_filename_list = []
+    sync_files_number = 0
+    for path, subdirs, sync_files in dir:
+        for sync_file in sync_files:
+            if not sync_file.endswith('.xml'):
+                sync_temp = os.path.join(path + '/', sync_file)
+                sync_filename_list.append(sync_file)
+                sync_list.append(sync_temp)
+                sync_files_number += 1
+
     # Load and render all the folders from the server for the current user
     dirname = f"static/Cloud/{email}/Folders/*"
     subfolders = [os.path.basename(x) for x in glob.glob(dirname)]
@@ -164,7 +178,8 @@ def index():
                 images_number += 1
 
     return render_template('index.html', files=zip(file_list, filename_list), hists=zip(images_list, image_names_list), subfolders=subfolders,
-                           images_number=images_number, files_number=files_number)
+                           images_number=images_number, files_number=files_number,
+                           sync_files=zip(sync_list, sync_filename_list), sync_files_number=sync_files_number)
 
 
 @main.route('/sharenet')
@@ -236,8 +251,28 @@ def delete_file(filename):
     flash(f'File "{filename}" was deleted succesfully.')
     return redirect(url_for('main.index'))
 
+# Delete selected file from the server
+
+
+@main.route('/delete-sync-file/<filename>')
+def delete_sync_file(filename):
+    email = session['email']
+    location = f"static/Cloud/{email}/Computers/"
+    path = os.path.join(location, filename)
+    xml_path = os.path.join(location, f"{filename}.xml")
+
+    if exists(xml_path):
+        os.remove(path)
+        os.remove(xml_path)
+    else:
+        os.remove(path)
+
+    flash(f'File "{filename}" was deleted succesfully.')
+    return redirect(url_for('main.index'))
 
 # Delete selected image from the server
+
+
 @main.route('/delete-image/<image_name>')
 def delete_image(image_name):
     email = session['email']

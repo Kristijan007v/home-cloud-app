@@ -1,1 +1,9 @@
-gAAAAABiEa94YDeLLU3oM9X71FiLcmjD2vheU3Eua-q9o3XuYPId4eL1IAnBJIasFEKsPw7Widk0JNzwVWwBCnGHPLKfspxkukZQYJr19rh0WlFw4kRAdPPjCMhX_U2prTXVtdcKuKEJUOON5RnvPnSNXL09u3lI7fs9IqVYHUUmrkAmN92GVBK6sNyCnlOM-3sUsaiRBLW_3JVDzjuIj2tpovwBWpHMTSuU7cJVbEOxjl6PHQLNztmjfXxcYnwUrhp2QA6fMWK9RUZy1X0TiBYGHUJMYRatdA==
+function makeBread(quantity) {
+  const bread = "🍞".repeat(quantity);
+
+  return bread;
+}
+
+const broj = makeBread(7);
+
+console.log(broj);
