@@ -1,0 +1,14 @@
+cryptography==36.0.1
+docx==0.2.4
+Flask==1.1.2
+Flask_Login==0.5.0
+Flask_SQLAlchemy==2.4.3
+fpdf==1.7.2
+ipinfo==4.2.1
+pycryptodome==3.14.1
+PyYAML==6.0
+requests==2.27.1
+SQLAlchemy==1.3.18
+tqdm==4.62.3
+Werkzeug==1.0.1
+zeep==4.1.0

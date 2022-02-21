@@ -17,5 +17,3 @@ def log(operation):
 
 
 log(" - Connecting to db")
-
-\

@@ -41,6 +41,6 @@ def rsa_decrypt(email):
 
 #email = 'kiki.vidovic.6969@gmail.com'
 # generate_keys()
-# rsa_encrypt('lego@gmail.com')
+# rsa_encrypt('kiki.vidovic.6969@gmail.com')
 # decrypt(email)
 # Test passed

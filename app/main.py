@@ -1,4 +1,5 @@
 from genericpath import exists
+import sqlite3
 from flask import Blueprint, render_template, session, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
@@ -177,9 +178,15 @@ def index():
                 images_list.append(temp_images)
                 images_number += 1
 
+    # Show all notes from user
+    conn = sqlite3.connect('db.sqlite')
+    notes = conn.execute(
+        "SELECT noteId, note, created_at FROM notes WHERE email=?", (email,)).fetchall()
+    conn.close()
+
     return render_template('index.html', files=zip(file_list, filename_list), hists=zip(images_list, image_names_list), subfolders=subfolders,
                            images_number=images_number, files_number=files_number,
-                           sync_files=zip(sync_list, sync_filename_list), sync_files_number=sync_files_number)
+                           sync_files=zip(sync_list, sync_filename_list), sync_files_number=sync_files_number, notes=notes)
 
 
 @main.route('/sharenet')
@@ -406,25 +413,84 @@ def logging(value):
     return redirect(url_for('main.profile'))
 
 
+# Add record to NOTES table
+@main.route('/add-new-note', methods=['POST'])
+@login_required
+def add_note():
+    email = session['email']
+    if request.method == 'POST':
+        try:
+            notee = request.form.get('note')
+
+            with sqlite3.connect("db.sqlite") as con:
+                cur = con.cursor()
+                cur.execute(
+                    'INSERT INTO notes (note, email) VALUES (?, ?)', (notee, email))
+
+                con.commit()
+                flash("Note successfully added!")
+        except:
+            con.rollback()
+            flash("Error in insert operation!")
+
+        finally:
+            con.close()
+            return redirect(url_for('main.index'))
+
+
+# delete NOTE
+@main.route('/delete-note/<id>')
+@login_required
+def delete_note(id):
+    conn = sqlite3.connect("db.sqlite")
+    sql = 'DELETE FROM notes WHERE noteId=?'
+    cur = conn.cursor()
+    cur.execute(sql, (id,))
+    conn.commit()
+    conn.close()
+    flash("Note deleted successfully!")
+    return redirect(url_for('main.index'))
+
+
+# Edit NOTE
+@main.route('/edit-note/<id>', methods=['POST'])
+@login_required
+def edit_note(id):
+    new_note = request.form.get('new_note')
+    conn = sqlite3.connect("db.sqlite")
+    sql = 'UPDATE notes SET note=? WHERE noteId=?'
+    cur = conn.cursor()
+    cur.execute(sql, (new_note, id,))
+    conn.commit()
+    conn.close()
+    flash("Note updated successfully!")
+    return redirect(url_for('main.index'))
+
+
 # Search
 @main.route('/search', methods=['POST'])
+@login_required
 def search():
     term = request.form.get('term')
 
     if term == 'imhide':
         set_reg('SHOW_IMAGES', 'False')
         flash("Image section set to hide!")
+        return redirect(url_for('main.index'))
     elif term == 'imshow':
         set_reg('SHOW_IMAGES', 'True')
         flash("Image section set to show!")
+        return redirect(url_for('main.index'))
     elif term == 'fhide':
         set_reg('SHOW_FILES', 'False')
         flash("Files section set to hide!")
+        return redirect(url_for('main.index'))
     elif term == 'fshow':
         set_reg('SHOW_FILES', 'True')
         flash("Files section set to show!")
-
-    return redirect(url_for('main.index'))
+        return redirect(url_for('main.index'))
+    else:
+        return render_template('search.html')
 
 
 @main.route('/downlaod/<filename>')
