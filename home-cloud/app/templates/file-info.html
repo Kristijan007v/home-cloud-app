@@ -13,8 +13,12 @@
   <p class="text-red-500">Your file was tampered, beware!</p>
   {% else %}
   <p class="text-green-500">Your file was not tampered, relax.</p>
+  {% endif %} {% if False == folder %}
+  <a href="/edit-file-info/{{filename}}/no" class="btn-field">Edit info</a>
+  {% else %}
+  <a href="/edit-file-info/{{filename}}/{{foldername}}" class="btn-field"
+    >Edit info</a
+  >
   {% endif %}
-
-  <a href="/edit-file-info/{{filename}}" class="btn-field">Edit info</a>
 </div>
 {% endblock %}

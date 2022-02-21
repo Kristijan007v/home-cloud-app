@@ -68,11 +68,12 @@ def load_folder(folder):
     files_number = 0
     for path, subdirs, files in dir:
         for file in files:
-            temp = os.path.join(path + '/', file)
-            filename_list.append(file)
-            subdir_list.append(subdirs)
-            file_list.append(temp)
-            files_number += 1
+            if not file.endswith('.xml'):
+                temp = os.path.join(path + '/', file)
+                filename_list.append(file)
+                subdir_list.append(subdirs)
+                file_list.append(temp)
+                files_number += 1
 
     # Load and render all the images from the server for the current user
     basepath_images = f"static/Cloud/{email}/Folders/{folder}/images"
@@ -82,10 +83,11 @@ def load_folder(folder):
     images_number = 0
     for path, subdirs, images in dir_images:
         for image in images:
-            temp_images = os.path.join(path + '/', image)
-            image_names_list.append(image)
-            images_list.append(temp_images)
-            images_number += 1
+            if not image.endswith('.json'):
+                temp_images = os.path.join(path + '/', image)
+                image_names_list.append(image)
+                images_list.append(temp_images)
+                images_number += 1
 
     return render_template('folder.html', files=zip(file_list, filename_list),
                            hists=zip(images_list, image_names_list), folder_link=folder_link, folder=folder, images_number=images_number,
@@ -155,13 +157,22 @@ def image_rename(image_name):
     return redirect(url_for('main.index'))
 
 
-@cloud.route('/file-info/<filename>')
-def file_info(filename):
+@cloud.route('/file-info/<filename>/<foldername>')
+def file_info(filename, foldername):
 
     email = session['email']
     file = f"static/Cloud/{email}/documents/{filename}"
+
+    if foldername == "no":
+        base_path = f"static/Cloud/{email}/documents/"
+        folder = False
+    else:
+        base_path = f"static/Cloud/{email}/Folders/{foldername}/documents/"
+        file = f"{base_path}/{filename}"
+        folder = True
+
     file_name, file_size, created_at, signature = File.load_info(
-        email, filename, 0, get_all=True)
+        email, base_path, filename, 0, get_all=True)
 
     check_signature = digital_signature(file)
 
@@ -171,18 +182,30 @@ def file_info(filename):
         status = False
 
     return render_template('file-info.html', filename=filename, file_name=file_name,
-                           file_size=file_size, created_at=created_at, signature=signature, status=status)
+                           file_size=file_size, created_at=created_at, signature=signature, status=status,
+                           folder=folder, foldername=foldername)
 
 
-@cloud.route('/edit-file-info/<filename>')
-def edit_file_info(filename):
+@cloud.route('/edit-file-info/<filename>/<foldername>')
+def edit_file_info(filename, foldername):
 
     email = session['email']
-    file_name, file_size, created_at, signature = File.load_info(
-        email, filename, 0, get_all=True)
 
-    return render_template('edit-file-info.html', filename=filename, file_name=file_name,
-                           file_size=file_size, created_at=created_at)
+    if foldername == "no":
+        base_path = f"static/Cloud/{email}/documents/"
+        file_name, file_size, created_at, signature = File.load_info(
+            email, base_path, filename, 0, get_all=True)
+
+        return render_template('edit-file-info.html', filename=filename, file_name=file_name,
+                               file_size=file_size, created_at=created_at)
+    else:
+        base_path = f"static/Cloud/{email}/Folders/{foldername}/documents/"
+        file = f"{base_path}/{filename}"
+        file_name, file_size, created_at, signature = File.load_info(
+            email, base_path, filename, 0, get_all=True)
+
+        return render_template('edit-file-info-folder.html', filename=filename, file_name=file_name,
+                               file_size=file_size, created_at=created_at)
 
 
 @cloud.route('/file-rename/<filename>', methods=['POST'])
@@ -204,15 +227,24 @@ def file_rename(filename):
     return redirect(url_for('main.index'))
 
 
-@cloud.route('/download-file/<filename>')
-def download_file(filename):
+@cloud.route('/download-file/<filename>/<foldername>')
+def download_file(filename, foldername):
 
     email = session['email']
-    directory = f"static/Cloud/{email}/documents"
     file = f"static/Cloud/{email}/documents/{filename}"
 
+    if foldername == "no":
+        base_path = f"static/Cloud/{email}/documents/"
+        directory = f"static/Cloud/{email}/documents"
+        file = f"static/Cloud/{email}/documents/{filename}"
+    else:
+        base_path = f"static/Cloud/{email}/Folders/{foldername}/documents"
+        directory = f"static/Cloud/{email}/Folders/{foldername}/documents"
+        file = f"{base_path}/{filename}"
+
     # Get original file signature than compare it to the current one to check if the file was tampared with
-    orginal_signature = File.load_info(email, filename, 3, get_all=False)
+    orginal_signature = File.load_info(
+        email, base_path, filename, 3, get_all=False)
     check_signature = digital_signature(file)
 
     if orginal_signature != check_signature:

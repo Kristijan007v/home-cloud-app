@@ -15,7 +15,7 @@ class File:
         self.date = date
         self.signature = signature
 
-    def save_info(self, email):
+    def save_info(self, base_path):
         m_encoding = 'UTF-8'
 
         root = ET.Element("data")
@@ -29,7 +29,8 @@ class File:
         xml_string = dom.toprettyxml()
         part1, part2 = xml_string.split('?>')
         from xml.dom import minidom
-        save_path = f"static/Cloud/{email}/documents/{self.name}.xml"
+        xml_name = f"{self.name}.xml"
+        save_path = f"{base_path}/{xml_name}"
 
         with open(save_path, 'w') as xfile:
             xfile.write(
@@ -37,11 +38,12 @@ class File:
             xfile.close()
 
     # Load xml info
-    def load_info(email, filename, get_element, get_all=False):
+    def load_info(email, base_path, filename, get_element, get_all=False):
 
         element_number = int(get_element)
 
-        open_path = f"static/Cloud/{email}/documents/{filename}.xml"
+        xml_name = f"{filename}.xml"
+        open_path = f"{base_path}/{xml_name}"
 
         # Pass the path of the xml document
         tree = ET.parse(open_path)

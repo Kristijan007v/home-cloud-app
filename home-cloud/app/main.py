@@ -187,7 +187,7 @@ def sharenet():
     return render_template('sharenet.html')
 
 
-# File upload API route
+# Main index File upload API route
 @main.route('/file-upload', methods=['POST'])
 def upload_file():
     email = session['email']
@@ -200,6 +200,32 @@ def upload_file():
         file.save(os.path.join(upload_path, filename))
 
         # Get all the file information
+        file_size = convert_size(os.path.getsize(f"{upload_path}/{filename}"))
+        created_at = time.ctime(os.path.getmtime(f"{upload_path}/{filename}"))
+        split_tup = os.path.splitext(f"{upload_path}/{filename}")
+        file_extension = split_tup[1]
+        signature = digital_signature(f"{upload_path}/{filename}")
+        file = File(filename, file_size, file_extension, created_at, signature)
+        # Save file info to xml
+        #File.save_info(file.name, file.size, file.extension, file.date)
+        file.save_info(upload_path)
+        flash("File uploaded succesfully.")
+    return redirect(url_for('main.index'))
+
+
+# Folder File upload API route
+@main.route('/folder-file-upload/<foldername>', methods=['POST'])
+def folder_upload_file(foldername):
+    email = session['email']
+    current = os.path.abspath(os.path.dirname(__file__))
+    dir = f"{current}/static/Cloud/{email}"
+    if request.method == 'POST':
+        file = request.files['file']
+        upload_path = f"static/Cloud/{email}/Folders/{foldername}/documents"
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(upload_path, filename))
+
+        # Get all the file information
         file_size = convert_size(os.path.getsize(upload_path))
         created_at = time.ctime(os.path.getmtime(upload_path))
         file_extension = pathlib.Path(file.filename).suffix
@@ -207,12 +233,38 @@ def upload_file():
         file = File(filename, file_size, file_extension, created_at, signature)
         # Save file info to xml
         #File.save_info(file.name, file.size, file.extension, file.date)
-        file.save_info(email)
+        file.save_info(upload_path)
         flash("File uploaded succesfully.")
-    return redirect(url_for('main.index'))
+    return redirect(f'/{foldername}')
 
+
+# Upload images inside folders
+@main.route('/folder-upload-image/<foldername>', methods=['POST'])
+def folder_upload_image(foldername):
+
+    email = session['email']
+
+    file = request.files['image']
+
+    filename = file.filename
+
+    upload_path = f"static/Cloud/{email}/Folders/{foldername}/images"
+    file.save(os.path.join(upload_path, filename))
+
+    file_path = f"{upload_path}/{filename}"
+    # Get all the file information
+    file_size = convert_size(os.path.getsize(file_path))
+    created_at = time.ctime(os.path.getmtime(file_path))
+    file_extension = pathlib.Path(file.filename).suffix
+    # Save to json
+    save_json(filename, file_size, file_extension, created_at, upload_path)
+
+    flash("Image uploaded succesfully.")
+    return redirect(f'/{foldername}')
 
 # Upload images
+
+
 @main.route('/upload-test/<email>', methods=['POST'])
 def upload_test(email):
 
